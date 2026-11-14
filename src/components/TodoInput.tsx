@@ -27,23 +27,31 @@ export function TodoInput({ onAdd }: TodoInputProps) {
 
   return (
     <div className="flex items-center gap-2 mb-4">
-      <input
-        type="text"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        onKeyDown={handleKeyDown}
-        placeholder="What needs to be done?"
-        aria-label="What needs to be done?"
-        className={`flex-1 px-4 py-2 rounded-lg border-2 border-gray-200 focus:outline-none focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-colors duration-200 ${
-          flashBorder ? 'border-red-500' : ''
-        }`}
-      />
+      <div className="relative flex-1">
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-lg"
+        >
+          ✍️
+        </span>
+        <input
+          type="text"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="What needs to be done?"
+          aria-label="What needs to be done?"
+          className={`w-full pl-10 pr-4 py-2.5 rounded-xl border-2 bg-gray-50/50 focus:bg-white focus:outline-none focus:border-indigo-400 focus:ring-4 focus:ring-indigo-100 transition-all duration-200 placeholder:text-gray-400 ${
+            flashBorder ? 'border-red-500 ring-4 ring-red-100' : 'border-gray-200'
+          }`}
+        />
+      </div>
       <button
         type="button"
         onClick={handleSubmit}
-        className="px-5 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 active:scale-95 transition-all duration-150 font-medium whitespace-nowrap"
+        className="px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-xl hover:from-indigo-600 hover:to-purple-600 shadow-md shadow-indigo-200 hover:shadow-lg hover:shadow-indigo-300 active:scale-95 transition-all duration-150 font-semibold whitespace-nowrap"
       >
-        Add
+        Add <span aria-hidden="true">✨</span>
       </button>
     </div>
   );

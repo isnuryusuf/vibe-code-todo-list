@@ -11,8 +11,9 @@ export function ClearCompleted({ count, onClear }: ClearCompletedProps) {
       <button
         type="button"
         onClick={onClear}
-        className="text-sm text-gray-400 hover:text-red-500 transition-colors duration-150 underline underline-offset-2"
+        className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-red-500 hover:bg-red-50 px-3 py-1.5 rounded-lg transition-all duration-150"
       >
+        <span aria-hidden="true">🧹</span>
         Clear completed ({count})
       </button>
     </div>

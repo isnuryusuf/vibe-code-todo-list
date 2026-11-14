@@ -3,7 +3,6 @@ import { useTodos } from './hooks/useTodos';
 import { FilterType } from './types/todo';
 import { TodoItem } from './components/TodoItem';
 import { TodoInput } from './components/TodoInput';
-import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoStats } from './components/TodoStats';
 import { EmptyState } from './components/EmptyState';

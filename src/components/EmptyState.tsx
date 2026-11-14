@@ -35,13 +35,13 @@ export function EmptyState({ filter }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center py-10 text-center">
       <div className="relative mb-4">
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 blur-xl scale-125" />
-        <div className="relative w-20 h-20 flex items-center justify-center rounded-full bg-white shadow-md border border-indigo-100 text-4xl float-animation">
+        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-indigo-500/20 to-fuchsia-500/20 blur-xl scale-125" />
+        <div className="relative w-20 h-20 flex items-center justify-center rounded-full bg-zinc-900 shadow-lg shadow-black/40 border border-white/10 text-4xl float-animation">
           <span aria-hidden="true">{illustrations[filter]}</span>
         </div>
       </div>
-      <p className="text-lg font-semibold text-gray-500">{messages[filter]}</p>
-      <p className="text-sm text-gray-400 mt-1 max-w-xs">{hints[filter]}</p>
+      <p className="text-lg font-semibold text-zinc-300">{messages[filter]}</p>
+      <p className="text-sm text-zinc-500 mt-1 max-w-xs">{hints[filter]}</p>
     </div>
   );
 }

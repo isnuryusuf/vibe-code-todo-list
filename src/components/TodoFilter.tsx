@@ -16,7 +16,7 @@ const filters: { value: FilterType; label: string; icon: string }[] = [
 
 export function TodoFilter({ filter, onChange }: TodoFilterProps) {
   return (
-    <div className="flex items-center gap-1 mb-4 border-b border-gray-200 pb-2 flex-wrap">
+    <div className="flex items-center gap-0.5 mb-3 border-b border-white/10 pb-2 flex-wrap">
       {filters.map(({ value, label, icon }) => {
         const isActive = value === filter;
         return (
@@ -26,10 +26,10 @@ export function TodoFilter({ filter, onChange }: TodoFilterProps) {
             onClick={() => onChange(value)}
             aria-pressed={isActive}
             data-icon={icon}
-            className={`px-3 py-2 text-sm font-medium rounded-t transition-all duration-150 before:content-[attr(data-icon)] before:mr-1.5 before:text-base ${
+            className={`px-2 py-1.5 text-xs font-medium rounded-t transition-all duration-150 before:content-[attr(data-icon)] before:mr-0.5 before:text-xs ${
               isActive
-                ? 'text-indigo-600 border-b-2 border-indigo-500 bg-indigo-50'
-                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                ? 'text-indigo-300 border-b-2 border-indigo-400 bg-indigo-500/10'
+                : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
             }`}
           >
             {label}

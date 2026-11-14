@@ -17,6 +17,18 @@ describe('CalendarView', () => {
     expect(screen.getByRole('grid')).toBeDefined();
   });
 
+  test('highlights the selected date', () => {
+    render(
+      <CalendarView
+        todos={[]}
+        onDateSelect={vi.fn()}
+        initialMonth={new Date('2025-12-01')}
+        selectedDate="2025-12-15"
+      />
+    );
+    expect(screen.getByLabelText(/December 15th, 2025, selected/i)).toBeDefined();
+  });
+
   test('calls onDateSelect when a day with a todo is clicked', () => {
     const onSelect = vi.fn();
     render(

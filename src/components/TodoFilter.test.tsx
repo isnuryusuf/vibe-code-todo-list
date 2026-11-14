@@ -35,7 +35,7 @@ describe('TodoFilter', () => {
     render(<TodoFilter filter="completed" onChange={vi.fn()} />);
 
     const completedBtn = screen.getByText('Completed') as HTMLElement;
-    expect(completedBtn.className).toContain('text-indigo-600');
-    expect(completedBtn.className).toContain('border-indigo-500');
+    expect(completedBtn.className).toContain('text-indigo-300');
+    expect(completedBtn.className).toContain('border-indigo-400');
   });
 });

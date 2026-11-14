@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { DayPicker } from 'react-day-picker';
 import type { Todo } from '../types/todo';
-import { toISODate, isOverdue } from '../utils/dateUtils';
+import { toISODate, isOverdue, parseISODate } from '../utils/dateUtils';
 
 interface CalendarViewProps {
   todos: Todo[];
   onDateSelect: (date: string) => void;
   initialMonth?: Date;
+  selectedDate?: string | null;
 }
 
-export function CalendarView({ todos, onDateSelect, initialMonth }: CalendarViewProps) {
+export function CalendarView({ todos, onDateSelect, initialMonth, selectedDate }: CalendarViewProps) {
   const [month, setMonth] = useState<Date>(initialMonth ?? new Date());
 
   const todosByDate = todos.reduce<Record<string, Todo[]>>((acc, todo) => {
@@ -33,35 +34,32 @@ export function CalendarView({ todos, onDateSelect, initialMonth }: CalendarView
   };
 
   return (
-    <div className="flex-1 bg-white/70 rounded-2xl p-4 border border-indigo-100/60">
-      <div className="flex items-center justify-center gap-2 mb-2 text-indigo-500">
+    <div className="flex-1 bg-zinc-900/50 rounded-2xl p-4 border border-white/10">
+      <div className="flex items-center justify-center gap-2 mb-2 text-indigo-300">
         <span aria-hidden="true" className="text-xl">🗓️</span>
         <span className="text-sm font-semibold">Your month at a glance</span>
       </div>
       <DayPicker
         mode="single"
         month={month}
+        selected={selectedDate ? parseISODate(selectedDate) : undefined}
         onMonthChange={setMonth}
         onSelect={handleSelect}
         modifiers={modifiers}
         modifiersClassNames={{
-          hasTodo: 'bg-indigo-100 text-indigo-700 rounded-full font-semibold',
-          hasOverdue: 'bg-red-100 text-red-700 rounded-full font-semibold',
-        }}
-        classNames={{
-          selected: 'bg-indigo-500 text-white rounded-full',
-          today: 'text-indigo-600 font-bold',
+          hasTodo: 'bg-indigo-500/25 text-indigo-200 rounded-full font-semibold',
+          hasOverdue: 'bg-red-500/25 text-red-200 rounded-full font-semibold',
         }}
       />
-      <div className="flex gap-4 justify-center mt-3 text-xs text-gray-500">
+      <div className="flex gap-4 justify-center mt-3 text-xs text-zinc-400">
         <span className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-indigo-200" /> Has todo
+          <span className="w-2.5 h-2.5 rounded-full bg-indigo-500/50" /> Has todo
         </span>
         <span className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-red-200" /> Overdue
+          <span className="w-2.5 h-2.5 rounded-full bg-red-500/50" /> Overdue
         </span>
       </div>
-      <p className="text-center text-xs text-gray-400 mt-2">
+      <p className="text-center text-xs text-zinc-500 mt-2">
         Click a highlighted day to see its tasks <span aria-hidden="true">👆</span>
       </p>
     </div>

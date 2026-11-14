@@ -1,18 +1,23 @@
 import { useState } from 'react';
 import type { KeyboardEvent } from 'react';
 import type { Todo } from '../types/todo';
+import { DueDatePicker } from './DueDatePicker';
+import { isOverdue, formatDate } from '../utils/dateUtils';
 
 interface TodoItemProps {
   todo: Todo;
   onToggle: () => void;
   onDelete: () => void;
   onEdit: (newText: string) => void;
+  onSetDueDate?: (date?: string) => void;
   className?: string;
 }
 
-export function TodoItem({ todo, onToggle, onDelete, onEdit, className = '' }: TodoItemProps) {
+export function TodoItem({ todo, onToggle, onDelete, onEdit, onSetDueDate, className = '' }: TodoItemProps) {
   const [editing, setEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
+
+  const overdue = todo.dueDate ? isOverdue(todo.dueDate, todo.completed) : false;
 
   const handleDoubleClick = () => {
     setEditText(todo.text);
@@ -55,14 +60,39 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit, className = '' }: T
             autoFocus
           />
         ) : (
-          <span
-            onDoubleClick={handleDoubleClick}
-            className={`block truncate cursor-text select-none transition-all duration-200 ${
-              todo.completed ? 'line-through opacity-50' : ''
-            }`}
-          >
-            {todo.text}
-          </span>
+          <div className="flex flex-col gap-0.5">
+            <span
+              onDoubleClick={handleDoubleClick}
+              className={`block truncate cursor-text select-none transition-all duration-200 ${
+                todo.completed ? 'line-through opacity-50' : ''
+              }`}
+            >
+              {todo.text}
+            </span>
+            {todo.dueDate && (
+              <div className="flex items-center gap-2">
+                <span
+                  className={`text-xs ${overdue ? 'text-red-500 font-medium' : 'text-gray-400'}`}
+                  aria-label={overdue ? `Overdue: ${formatDate(todo.dueDate)}` : `Due: ${formatDate(todo.dueDate)}`}
+                >
+                  {formatDate(todo.dueDate)}
+                </span>
+                {overdue && (
+                  <span className="text-xs text-white bg-red-500 px-1.5 py-0.5 rounded-full">
+                    Overdue
+                  </span>
+                )}
+                {onSetDueDate && (
+                  <DueDatePicker value={todo.dueDate} onChange={onSetDueDate} />
+                )}
+              </div>
+            )}
+            {!todo.dueDate && onSetDueDate && (
+              <div className="flex items-center">
+                <DueDatePicker value={todo.dueDate} onChange={onSetDueDate} />
+              </div>
+            )}
+          </div>
         )}
       </div>
       <button

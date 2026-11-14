@@ -3,6 +3,7 @@ import type { Express, NextFunction, Request, Response } from 'express';
 import { resolve } from 'node:path';
 import type { DatabaseSync } from 'node:sqlite';
 import { createAuthRouter } from './auth.ts';
+import { createTodosRouter } from './todos.ts';
 
 export interface AppOptions {
   staticDir?: string;
@@ -25,6 +26,7 @@ export function createApp(db: DatabaseSync, options: AppOptions = {}): Express {
   });
 
   app.use('/api/auth', createAuthRouter(db));
+  app.use('/api/todos', createTodosRouter(db));
 
   app.use('/api', (_req, res) => {
     res.status(404).json({ error: 'Not found' });

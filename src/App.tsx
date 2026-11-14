@@ -10,6 +10,7 @@ import { TodoStats } from './components/TodoStats';
 import { EmptyState } from './components/EmptyState';
 import { ClearCompleted } from './components/ClearCompleted';
 import { CalendarView } from './components/CalendarView';
+import { CalendarExportButton } from './components/CalendarExportButton';
 import { isToday, formatDate } from './utils/dateUtils';
 
 type ViewMode = 'list' | 'calendar';
@@ -125,9 +126,12 @@ function App() {
               </div>
             </div>
 
-            <div className="hidden min-[900px]:flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-zinc-300 backdrop-blur">
-              <span aria-hidden="true">📅</span>
-              {format(new Date(), 'EEEE, MMM d')}
+            <div className="flex items-center gap-2">
+              <CalendarExportButton todos={todos} />
+              <div className="hidden min-[900px]:flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-zinc-300 backdrop-blur">
+                <span aria-hidden="true">📅</span>
+                {format(new Date(), 'EEEE, MMM d')}
+              </div>
             </div>
           </div>
         </div>

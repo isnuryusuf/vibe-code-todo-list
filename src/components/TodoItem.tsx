@@ -3,6 +3,7 @@ import type { KeyboardEvent } from 'react';
 import type { Todo } from '../types/todo';
 import { DueDatePicker } from './DueDatePicker';
 import { isOverdue, isToday, formatDate } from '../utils/dateUtils';
+import { toGoogleCalendarUrl, toOutlookCalendarUrl } from '../utils/calendarExport';
 
 interface TodoItemProps {
   todo: Todo;
@@ -104,6 +105,32 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit, onSetDueDate, class
               {overdue && (
                 <span className="text-xs text-white bg-gradient-to-r from-red-500 to-pink-500 px-2 py-0.5 rounded-full font-semibold shadow-sm shadow-red-950/50">
                   <span aria-hidden="true">🔥</span> Overdue
+                </span>
+              )}
+              {todo.dueDate && (
+                <span className="inline-flex items-center gap-1">
+                  <a
+                    href={toGoogleCalendarUrl(todo)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Add "${todo.text}" to Google Calendar`}
+                    title="Add to Google Calendar"
+                    className="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/25 rounded-full px-2 py-0.5 transition-colors"
+                  >
+                    <span aria-hidden="true" className="text-[10px]">📅</span>
+                    Google
+                  </a>
+                  <a
+                    href={toOutlookCalendarUrl(todo)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Add "${todo.text}" to Outlook Calendar`}
+                    title="Add to Outlook Calendar"
+                    className="inline-flex items-center gap-1 text-[11px] font-medium text-zinc-400 hover:text-white bg-white/5 hover:bg-sky-500/15 border border-white/10 hover:border-sky-400/30 rounded-full px-2 py-0.5 transition-colors"
+                  >
+                    <span aria-hidden="true" className="text-[10px]">📨</span>
+                    Outlook
+                  </a>
                 </span>
               )}
               {onSetDueDate && (

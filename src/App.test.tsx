@@ -80,6 +80,11 @@ describe('App smoke test', () => {
     }
   });
 
+  test('shows the ICS export control in the header', () => {
+    render(<App />);
+    expect(screen.getByRole('button', { name: /export/i })).toBeDefined();
+  });
+
   test('switches to calendar view', () => {
     render(<App />);
     fireEvent.click(screen.getByText('Calendar'));

@@ -91,6 +91,32 @@ describe('TodoItem', () => {
     expect(screen.getByText(/overdue/i)).toBeDefined();
   });
 
+  test('shows Google and Outlook calendar links when a due date is set', () => {
+    const todo = makeTodo({ dueDate: '2026-12-25' });
+    render(<TodoItem todo={todo} onToggle={vi.fn()} onDelete={vi.fn()} onEdit={vi.fn()} onSetDueDate={vi.fn()} />);
+
+    const google = screen.getByLabelText(/add "Test todo" to google calendar/i) as HTMLAnchorElement;
+    const outlook = screen.getByLabelText(/add "Test todo" to outlook calendar/i) as HTMLAnchorElement;
+
+    const googleUrl = new URL(google.href);
+    expect(googleUrl.origin + googleUrl.pathname).toBe('https://calendar.google.com/calendar/render');
+    expect(googleUrl.searchParams.get('dates')).toBe('20261225/20261226');
+    expect(google.target).toBe('_blank');
+    expect(google.rel).toContain('noopener');
+
+    const outlookUrl = new URL(outlook.href);
+    expect(outlookUrl.searchParams.get('startdt')).toBe('2026-12-25T00:00:00');
+    expect(outlookUrl.searchParams.get('allday')).toBe('true');
+  });
+
+  test('hides calendar links when there is no due date', () => {
+    const todo = makeTodo();
+    render(<TodoItem todo={todo} onToggle={vi.fn()} onDelete={vi.fn()} onEdit={vi.fn()} onSetDueDate={vi.fn()} />);
+
+    expect(screen.queryByLabelText(/to google calendar/i)).toBeNull();
+    expect(screen.queryByLabelText(/to outlook calendar/i)).toBeNull();
+  });
+
   test('calls onSetDueDate when date is selected', () => {
     const onSetDueDate = vi.fn();
     const todo = makeTodo();

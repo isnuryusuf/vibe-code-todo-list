@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import App from './App';
 
@@ -55,6 +55,29 @@ describe('App smoke test', () => {
     // Verify it's gone
     await screen.findByText(/no tasks/i);
     expect(screen.queryByText('Learn TypeScript')).toBeFalsy();
+  });
+
+  test('shows the calendar beside the list at desktop widths', () => {
+    const original = window.matchMedia;
+    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+      matches: true,
+      media: query,
+      onchange: null,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    })) as unknown as typeof window.matchMedia;
+
+    try {
+      render(<App />);
+      expect(screen.getByRole('grid')).toBeDefined();
+      expect(screen.getByText('All')).toBeDefined();
+      expect(screen.getByRole('complementary', { name: /calendar/i })).toBeDefined();
+    } finally {
+      window.matchMedia = original;
+    }
   });
 
   test('switches to calendar view', () => {

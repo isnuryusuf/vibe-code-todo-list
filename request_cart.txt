@@ -1,0 +1,8 @@
+POST /api/v1/web/cart HTTP/1.1
+Host: api.vmx.id
+Content-Type: application/json
+User-Agent: sqlmap/1.10.11
+Accept: */*
+Connection: close
+
+{"customerId":1,"test":true}

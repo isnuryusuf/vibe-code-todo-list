@@ -7,6 +7,10 @@ import { TodoFilter } from './components/TodoFilter';
 import { TodoStats } from './components/TodoStats';
 import { EmptyState } from './components/EmptyState';
 import { ClearCompleted } from './components/ClearCompleted';
+import { CalendarView } from './components/CalendarView';
+import { isToday } from './utils/dateUtils';
+
+type ViewMode = 'list' | 'calendar';
 
 function App() {
   const {
@@ -15,6 +19,7 @@ function App() {
     toggleTodo,
     deleteTodo,
     editTodo,
+    setDueDate,
     clearCompleted,
     activeCount,
     totalCount,
@@ -22,6 +27,8 @@ function App() {
   } = useTodos();
 
   const [filter, setFilter] = useState<FilterType>('all');
+  const [view, setView] = useState<ViewMode>('list');
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [animatingIds, setAnimatingIds] = useState<Set<string>>(new Set());
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -48,6 +55,29 @@ function App() {
     [addTodo]
   );
 
+  const handleFilterChange = useCallback((newFilter: FilterType) => {
+    setFilter(newFilter);
+    setSelectedDate(null);
+    setView('list');
+  }, []);
+
+  const handleCalendarSelect = useCallback((date: string) => {
+    setFilter('all');
+    setSelectedDate(date);
+    setView('list');
+  }, []);
+
+  const displayedTodos = selectedDate
+    ? todos.filter((t) => t.dueDate === selectedDate)
+    : todos;
+
+  const dateFilterActive = selectedDate !== null;
+  const dateFilterLabel = selectedDate
+    ? isToday(selectedDate)
+      ? 'Due today'
+      : `Due ${selectedDate}`
+    : null;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
       {/* Gradient Header */}
@@ -67,32 +97,82 @@ function App() {
             <TodoInput onAdd={handleAdd} />
           </div>
 
-          {/* Filter Tabs */}
-          <div className="mb-3">
-            <TodoFilter filter={filter} onChange={setFilter} />
+          {/* View Tabs */}
+          <div className="flex items-center gap-1 mb-4 border-b border-gray-200 pb-2">
+            <button
+              type="button"
+              onClick={() => setView('list')}
+              aria-pressed={view === 'list'}
+              className={`px-4 py-2 text-sm font-medium rounded-t transition-colors duration-150 ${
+                view === 'list'
+                  ? 'text-indigo-600 border-b-2 border-indigo-500 bg-indigo-50'
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              List
+            </button>
+            <button
+              type="button"
+              onClick={() => setView('calendar')}
+              aria-pressed={view === 'calendar'}
+              className={`px-4 py-2 text-sm font-medium rounded-t transition-colors duration-150 ${
+                view === 'calendar'
+                  ? 'text-indigo-600 border-b-2 border-indigo-500 bg-indigo-50'
+                  : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              Calendar
+            </button>
           </div>
 
-          {/* List or Empty State */}
-          {todos.length === 0 ? (
-            <EmptyState filter={filter} />
+          {view === 'calendar' ? (
+            <CalendarView todos={todos} onDateSelect={handleCalendarSelect} />
           ) : (
             <>
-              <TodoList
-                todos={todos}
-                filter={filter}
-                onToggle={toggleTodo}
-                onDelete={deleteTodo}
-                onEdit={editTodo}
-                itemClassName={(id) => (animatingIds.has(id) ? 'slide-in' : '')}
-              />
-
-              {/* Stats */}
-              <div className="mt-4">
-                <TodoStats activeCount={activeCount} totalCount={totalCount} />
+              {/* Filter Tabs */}
+              <div className="mb-3">
+                <TodoFilter filter={filter} onChange={handleFilterChange} />
               </div>
 
-              {/* Clear Completed */}
-              <ClearCompleted count={completedCount} onClear={clearCompleted} />
+              {dateFilterActive && (
+                <div className="mb-3 flex items-center gap-2">
+                  <span className="text-sm text-indigo-600 font-medium">
+                    {dateFilterLabel}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedDate(null)}
+                    className="text-xs text-gray-400 hover:text-gray-600 underline"
+                  >
+                    Clear
+                  </button>
+                </div>
+              )}
+
+              {/* List or Empty State */}
+              {displayedTodos.length === 0 ? (
+                <EmptyState filter={filter} />
+              ) : (
+                <>
+                  <TodoList
+                    todos={displayedTodos}
+                    filter={filter}
+                    onToggle={toggleTodo}
+                    onDelete={deleteTodo}
+                    onEdit={editTodo}
+                    onSetDueDate={setDueDate}
+                    itemClassName={(id) => (animatingIds.has(id) ? 'slide-in' : '')}
+                  />
+
+                  {/* Stats */}
+                  <div className="mt-4">
+                    <TodoStats activeCount={activeCount} totalCount={totalCount} />
+                  </div>
+
+                  {/* Clear Completed */}
+                  <ClearCompleted count={completedCount} onClear={clearCompleted} />
+                </>
+              )}
             </>
           )}
         </div>

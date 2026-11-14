@@ -56,4 +56,26 @@ describe('App smoke test', () => {
     await screen.findByText(/no tasks/i);
     expect(screen.queryByText('Learn TypeScript')).toBeFalsy();
   });
+
+  test('switches to calendar view', () => {
+    render(<App />);
+    fireEvent.click(screen.getByText('Calendar'));
+    expect(screen.getByRole('grid')).toBeDefined();
+  });
+
+  test('selecting a calendar date filters list to that date', async () => {
+    render(<App />);
+    const input = screen.getByPlaceholderText(/what needs/i);
+    fireEvent.change(input, { target: { value: 'Meeting' } });
+    fireEvent.click(screen.getByRole('button', { name: /add/i }));
+    await screen.findByText('Meeting');
+
+    fireEvent.click(screen.getByLabelText(/pick due date/i));
+    fireEvent.click(screen.getByText('25'));
+
+    fireEvent.click(screen.getByText('Calendar'));
+    fireEvent.click(screen.getByText('25'));
+
+    await screen.findByText('Meeting');
+  });
 });

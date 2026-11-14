@@ -45,8 +45,8 @@ export function CalendarView({ todos, onDateSelect, initialMonth }: CalendarView
           hasOverdue: 'bg-red-100 text-red-700 rounded-full',
         }}
         classNames={{
-          day_selected: 'bg-indigo-500 text-white rounded-full',
-          day_today: 'text-indigo-600 font-bold',
+          selected: 'bg-indigo-500 text-white rounded-full',
+          today: 'text-indigo-600 font-bold',
         }}
       />
       <div className="flex gap-4 justify-center mt-4 text-xs text-gray-500">

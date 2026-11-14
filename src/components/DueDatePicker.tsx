@@ -56,8 +56,8 @@ export function DueDatePicker({ value, onChange }: DueDatePickerProps) {
             selected={value ? new Date(value) : undefined}
             onSelect={handleSelect}
             classNames={{
-              day_selected: 'bg-indigo-500 text-white rounded',
-              day_today: 'text-indigo-600 font-bold',
+              selected: 'bg-indigo-500 text-white rounded',
+              today: 'text-indigo-600 font-bold',
             }}
           />
         </div>

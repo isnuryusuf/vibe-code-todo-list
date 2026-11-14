@@ -8,6 +8,9 @@ const messages: Record<FilterType, string> = {
   all: 'No tasks yet. Add one above!',
   active: 'No active tasks. 🎉',
   completed: 'No completed tasks. Get to work! 💪',
+  today: 'Nothing due today.',
+  upcoming: 'No upcoming tasks.',
+  overdue: 'No overdue tasks. Great job! 🎉',
 };
 
 export function EmptyState({ filter }: EmptyStateProps) {

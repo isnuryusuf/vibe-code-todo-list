@@ -3,12 +3,15 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { TodoFilter } from './TodoFilter';
 
 describe('TodoFilter', () => {
-  test('shows three tabs: All, Active, Completed', () => {
+  test('shows six tabs: All, Active, Completed, Today, Upcoming, Overdue', () => {
     render(<TodoFilter filter="all" onChange={vi.fn()} />);
 
     expect(screen.getByText('All')).toBeTruthy();
     expect(screen.getByText('Active')).toBeTruthy();
     expect(screen.getByText('Completed')).toBeTruthy();
+    expect(screen.getByText('Today')).toBeTruthy();
+    expect(screen.getByText('Upcoming')).toBeTruthy();
+    expect(screen.getByText('Overdue')).toBeTruthy();
   });
 
   test('calls onChange when tab is clicked', () => {
@@ -20,6 +23,12 @@ describe('TodoFilter', () => {
 
     fireEvent.click(screen.getByText('Completed'));
     expect(onChange).toHaveBeenCalledWith('completed');
+
+    fireEvent.click(screen.getByText('Today'));
+    expect(onChange).toHaveBeenCalledWith('today');
+
+    fireEvent.click(screen.getByText('Overdue'));
+    expect(onChange).toHaveBeenCalledWith('overdue');
   });
 
   test('highlights active tab', () => {

@@ -58,4 +58,42 @@ describe('TodoList', () => {
 
     expect(screen.getByText(/no tasks/i)).toBeTruthy();
   });
+
+  test('filter overdue shows only overdue uncompleted todos', () => {
+    const todos = [
+      { id: '1', text: 'Old', completed: false, createdAt: 1, dueDate: '2020-01-01' },
+      { id: '2', text: 'Done old', completed: true, createdAt: 1, dueDate: '2020-01-01' },
+      { id: '3', text: 'Future', completed: false, createdAt: 1, dueDate: '2030-01-01' },
+    ];
+    render(
+      <TodoList
+        todos={todos}
+        filter="overdue"
+        onToggle={vi.fn()}
+        onDelete={vi.fn()}
+        onEdit={vi.fn()}
+      />
+    );
+    expect(screen.getByText('Old')).toBeTruthy();
+    expect(screen.queryByText('Done old')).toBeFalsy();
+    expect(screen.queryByText('Future')).toBeFalsy();
+  });
+
+  test('todos are sorted by due date', () => {
+    const todos = [
+      { id: '1', text: 'Later', completed: false, createdAt: 1, dueDate: '2030-01-01' },
+      { id: '2', text: 'Sooner', completed: false, createdAt: 1, dueDate: '2025-01-01' },
+    ];
+    render(
+      <TodoList
+        todos={todos}
+        filter="all"
+        onToggle={vi.fn()}
+        onDelete={vi.fn()}
+        onEdit={vi.fn()}
+      />
+    );
+    const items = screen.getAllByRole('listitem');
+    expect(items[0].textContent).toContain('Sooner');
+  });
 });

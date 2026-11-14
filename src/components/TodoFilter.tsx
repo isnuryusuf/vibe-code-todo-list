@@ -5,11 +5,11 @@ interface TodoFilterProps {
   onChange: (filter: FilterType) => void;
 }
 
-const filters: FilterType[] = ['all', 'active', 'completed'];
+const filters: FilterType[] = ['all', 'active', 'completed', 'today', 'upcoming', 'overdue'];
 
 export function TodoFilter({ filter, onChange }: TodoFilterProps) {
   return (
-    <div className="flex items-center gap-1 mb-4 border-b border-gray-200 pb-2">
+    <div className="flex items-center gap-1 mb-4 border-b border-gray-200 pb-2 flex-wrap">
       {filters.map((f) => {
         const isActive = f === filter;
         return (

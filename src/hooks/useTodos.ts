@@ -48,6 +48,12 @@ export function useTodos() {
     );
   }, []);
 
+  const setDueDate = useCallback((id: string, dueDate?: string) => {
+    setTodos((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, dueDate } : t))
+    );
+  }, []);
+
   const clearCompleted = useCallback(() => {
     setTodos((prev) => prev.filter((t) => !t.completed));
   }, []);
@@ -62,6 +68,7 @@ export function useTodos() {
     toggleTodo,
     deleteTodo,
     editTodo,
+    setDueDate,
     clearCompleted,
     totalCount,
     activeCount,

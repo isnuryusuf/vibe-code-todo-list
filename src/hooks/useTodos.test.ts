@@ -143,4 +143,31 @@ describe('useTodos', () => {
     expect(result.current.activeCount).toBe(2);
     expect(result.current.completedCount).toBe(1);
   });
+
+  test('sets a due date on a todo', () => {
+    const { result } = renderHook(() => useTodos());
+    act(() => result.current.addTodo('Due soon'));
+    const id = result.current.todos[0].id;
+
+    act(() => result.current.setDueDate(id, '2025-12-25'));
+    expect(result.current.todos[0].dueDate).toBe('2025-12-25');
+  });
+
+  test('clears a due date on a todo', () => {
+    const { result } = renderHook(() => useTodos());
+    act(() => result.current.addTodo('Due soon'));
+    const id = result.current.todos[0].id;
+
+    act(() => result.current.setDueDate(id, '2025-12-25'));
+    act(() => result.current.setDueDate(id, undefined));
+    expect(result.current.todos[0].dueDate).toBeUndefined();
+  });
+
+  test('loads legacy todos without dueDate', () => {
+    const legacy = [{ id: '1', text: 'Old', completed: false, createdAt: 1 }];
+    localStorage.setItem('todos-app', JSON.stringify(legacy));
+    const { result } = renderHook(() => useTodos());
+    expect(result.current.todos[0].dueDate).toBeUndefined();
+    expect(result.current.todos[0].text).toBe('Old');
+  });
 });

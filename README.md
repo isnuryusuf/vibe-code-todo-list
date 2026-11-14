@@ -1,32 +1,69 @@
-# React + TypeScript + Vite
+# My Todos
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A multi-user todo app with a React front end and an Express + SQLite backend.
+Each account has its own private todo list; sessions are stored server-side and
+referenced by an HTTP-only cookie.
 
-Currently, two official plugins are available:
+## Requirements
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Node.js 26 or newer (the server runs TypeScript directly and uses the built-in
+  `node:sqlite` driver)
 
-## React Compiler
+## Getting started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```powershell
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+- Web app: <http://localhost:5173>
+- API: <http://localhost:3001> (Vite proxies `/api` to it)
+
+Sign in with the seeded account:
+
+- **Username:** `mimin`
+- **Password:** `Mimin2026`
+
+You can also create your own account from the login page.
+
+## Data
+
+Accounts, sessions, and todos live in `data/todos.db` (SQLite). The file and its
+directory are created on first start and are ignored by git. Delete the file to
+reset the app; the `mimin` account is re-seeded on the next start.
+
+Passwords are stored as salted scrypt hashes, and session tokens are stored only
+as SHA-256 hashes. Todos left in the old browser `localStorage` list are imported
+once into the first account you sign in with in that browser.
+
+## Scripts
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | Runs the API with watch mode and the Vite dev server together |
+| `npm run dev:server` | Runs only the API (`node --watch server/index.ts`) |
+| `npm run dev:client` | Runs only the Vite dev server |
+| `npm run build` | Type-checks the app and server, then builds `dist/` |
+| `npm start` | Runs the API and serves the built app from `dist/` |
+| `npm test` | Runs the Vitest suite in watch mode |
+| `npm run test:run` | Runs the Vitest suite once |
+| `npm run lint` | Runs Oxlint |
+
+## Production
+
+```powershell
+npm run build
+npm start
+```
+
+Express serves the API and the built front end from one server (port 3001 by
+default). Set `PORT` to change the port. When serving over HTTPS, set
+`COOKIE_SECURE=true` so session cookies are marked `Secure`.
+
+Environment variables:
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `PORT` | `3001` | HTTP port |
+| `DB_PATH` | `data/todos.db` | SQLite database location |
+| `COOKIE_SECURE` | unset | Set to `true` behind HTTPS |

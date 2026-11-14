@@ -1,6 +1,7 @@
 import { describe, test, expect, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useTodos, Todo } from './useTodos';
+import { useTodos } from './useTodos';
+import type { Todo } from '../types/todo';
 
 const STORAGE_KEY = 'todos-app';
 

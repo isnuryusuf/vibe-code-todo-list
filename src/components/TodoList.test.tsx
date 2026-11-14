@@ -1,7 +1,7 @@
 import { describe, test, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { TodoList } from './TodoList';
-import { Todo } from '../types/todo';
+import type { Todo } from '../types/todo';
 
 const makeTodos = (count: number, completedCount: number = 0): Todo[] =>
   Array.from({ length: count }, (_, i) => ({

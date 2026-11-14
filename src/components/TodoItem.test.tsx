@@ -1,6 +1,7 @@
 import { describe, test, expect, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { TodoItem } from './TodoItem';
+import type { Todo } from '../types/todo';
 
 const makeTodo = (overrides: Partial<Todo> = {}): Todo => ({
   id: '1',
@@ -31,7 +32,7 @@ describe('TodoItem', () => {
       <TodoItem todo={todo} onToggle={vi.fn()} onDelete={onDelete} onEdit={vi.fn()} />
     );
 
-    const deleteBtn = screen.getByLabelText('Delete');
+    const deleteBtn = screen.getByLabelText(/delete/i);
     fireEvent.click(deleteBtn);
 
     expect(onDelete).toHaveBeenCalledTimes(1);
@@ -43,8 +44,7 @@ describe('TodoItem', () => {
       <TodoItem todo={todo} onToggle={vi.fn()} onDelete={vi.fn()} onEdit={vi.fn()} />
     );
 
-    const text = screen.getByText('Test todo');
-    const checkbox = screen.getByRole('checkbox');
+    const checkbox = screen.getByRole('checkbox') as HTMLInputElement;
 
     expect(checkbox.checked).toBe(true);
   });
@@ -58,7 +58,24 @@ describe('TodoItem', () => {
     const textEl = screen.getByText('Test todo');
     fireEvent.doubleClick(textEl);
 
-    const input = screen.getByRole('textbox', { name: '' });
+    const input = screen.getByDisplayValue('Test todo');
     expect(input).toBeDefined();
+  });
+
+  test('cancels edit on Escape', () => {
+    const onEdit = vi.fn();
+    const todo = makeTodo();
+    render(
+      <TodoItem todo={todo} onToggle={vi.fn()} onDelete={vi.fn()} onEdit={onEdit} />
+    );
+
+    fireEvent.doubleClick(screen.getByText('Test todo'));
+    const input = screen.getByDisplayValue('Test todo') as HTMLInputElement;
+
+    fireEvent.change(input, { target: { value: 'Changed text' } });
+    fireEvent.keyDown(input, { key: 'Escape' });
+
+    expect(onEdit).not.toHaveBeenCalled();
+    expect(screen.getByText('Test todo')).toBeDefined();
   });
 });

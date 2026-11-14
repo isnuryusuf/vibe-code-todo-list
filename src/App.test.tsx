@@ -5,10 +5,7 @@ import App from './App';
 describe('App smoke test', () => {
   test('renders the app', () => {
     render(<App />);
-    // Check if anything rendered at all
-    const body = document.body;
-    console.log('body html:', body.innerHTML);
-    expect(body.children.length).toBeGreaterThan(0);
+    expect(document.body.children.length).toBeGreaterThan(0);
   });
 
   test('full user flow: add, toggle, edit, filter, delete', async () => {
@@ -52,7 +49,7 @@ describe('App smoke test', () => {
     expect(screen.queryByText('Learn React')).toBeFalsy();
 
     // Delete it
-    const deleteBtn = screen.getByLabelText('Delete');
+    const deleteBtn = screen.getByLabelText(/delete/i);
     fireEvent.click(deleteBtn);
 
     // Verify it's gone

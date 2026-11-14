@@ -1,8 +1,8 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useTodos } from './hooks/useTodos';
-import { FilterType } from './types/todo';
-import { TodoItem } from './components/TodoItem';
+import type { FilterType } from './types/todo';
 import { TodoInput } from './components/TodoInput';
+import { TodoList } from './components/TodoList';
 import { TodoFilter } from './components/TodoFilter';
 import { TodoStats } from './components/TodoStats';
 import { EmptyState } from './components/EmptyState';
@@ -23,12 +23,21 @@ function App() {
 
   const [filter, setFilter] = useState<FilterType>('all');
   const [animatingIds, setAnimatingIds] = useState<Set<string>>(new Set());
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleAdd = useCallback(
     (text: string) => {
       const id = addTodo(text);
       setAnimatingIds((prev) => new Set(prev).add(id));
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setAnimatingIds((prev) => {
           const next = new Set(prev);
           next.delete(id);
@@ -38,12 +47,6 @@ function App() {
     },
     [addTodo]
   );
-
-  const filteredTodos = useMemo(() => {
-    if (filter === 'active') return todos.filter((t) => !t.completed);
-    if (filter === 'completed') return todos.filter((t) => t.completed);
-    return todos;
-  }, [todos, filter]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100">
@@ -74,24 +77,14 @@ function App() {
             <EmptyState filter={filter} />
           ) : (
             <>
-              <ul className="space-y-1 flex-1">
-                {filteredTodos.map((todo) => {
-                  const isAnimating = animatingIds.has(todo.id);
-                  return (
-                    <li
-                      key={todo.id}
-                      className={`${isAnimating ? 'slide-in' : ''}`}
-                    >
-                      <TodoItem
-                        todo={todo}
-                        onToggle={() => toggleTodo(todo.id)}
-                        onDelete={() => deleteTodo(todo.id)}
-                        onEdit={(newText) => editTodo(todo.id, newText)}
-                      />
-                    </li>
-                  );
-                })}
-              </ul>
+              <TodoList
+                todos={todos}
+                filter={filter}
+                onToggle={toggleTodo}
+                onDelete={deleteTodo}
+                onEdit={editTodo}
+                itemClassName={(id) => (animatingIds.has(id) ? 'slide-in' : '')}
+              />
 
               {/* Stats */}
               <div className="mt-4">

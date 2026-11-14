@@ -1,4 +1,4 @@
-import { Todo } from '../types/todo';
+import type { Todo } from '../types/todo';
 import { TodoItem } from './TodoItem';
 
 interface TodoListProps {
@@ -7,6 +7,7 @@ interface TodoListProps {
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   onEdit: (id: string, text: string) => void;
+  itemClassName?: (id: string) => string;
 }
 
 const filterMessages: Record<'all' | 'active' | 'completed', string> = {
@@ -21,6 +22,7 @@ export function TodoList({
   onToggle,
   onDelete,
   onEdit,
+  itemClassName,
 }: TodoListProps) {
   const filtered = todos.filter((t) => {
     if (filter === 'active') return !t.completed;
@@ -43,6 +45,7 @@ export function TodoList({
               onToggle={() => onToggle(todo.id)}
               onDelete={() => onDelete(todo.id)}
               onEdit={(newText) => onEdit(todo.id, newText)}
+              className={itemClassName?.(todo.id)}
             />
           ))}
         </ul>

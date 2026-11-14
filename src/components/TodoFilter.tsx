@@ -1,4 +1,4 @@
-import { FilterType } from '../types/todo';
+import type { FilterType } from '../types/todo';
 
 interface TodoFilterProps {
   filter: FilterType;
@@ -17,6 +17,7 @@ export function TodoFilter({ filter, onChange }: TodoFilterProps) {
             key={f}
             type="button"
             onClick={() => onChange(f)}
+            aria-pressed={isActive}
             className={`px-4 py-2 text-sm font-medium rounded-t transition-colors duration-150 ${
               isActive
                 ? 'text-indigo-600 border-b-2 border-indigo-500 bg-indigo-50'

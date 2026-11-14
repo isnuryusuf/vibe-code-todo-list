@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { TodoInput } from './TodoInput';
 
@@ -7,7 +7,7 @@ describe('TodoInput', () => {
     const onAdd = vi.fn();
     render(<TodoInput onAdd={onAdd} />);
 
-    const input = screen.getByRole('textbox');
+    const input = screen.getByRole('textbox') as HTMLInputElement;
     fireEvent.change(input, { target: { value: 'Buy milk' } });
     fireEvent.keyDown(input, { key: 'Enter' });
 
@@ -18,7 +18,7 @@ describe('TodoInput', () => {
     const onAdd = vi.fn();
     render(<TodoInput onAdd={onAdd} />);
 
-    const input = screen.getByRole('textbox');
+    const input = screen.getByRole('textbox') as HTMLInputElement;
     fireEvent.keyDown(input, { key: 'Enter' });
 
     expect(onAdd).not.toHaveBeenCalled();
@@ -28,7 +28,7 @@ describe('TodoInput', () => {
     const onAdd = vi.fn();
     render(<TodoInput onAdd={onAdd} />);
 
-    const input = screen.getByRole('textbox');
+    const input = screen.getByRole('textbox') as HTMLInputElement;
     fireEvent.change(input, { target: { value: 'Buy milk' } });
     fireEvent.keyDown(input, { key: 'Enter' });
 
@@ -41,7 +41,7 @@ describe('TodoInput', () => {
     const onAdd = vi.fn();
     render(<TodoInput onAdd={onAdd} />);
 
-    const input = screen.getByRole('textbox');
+    const input = screen.getByRole('textbox') as HTMLInputElement;
     fireEvent.change(input, { target: { value: 'Buy milk' } });
     fireEvent.click(screen.getByRole('button'));
 

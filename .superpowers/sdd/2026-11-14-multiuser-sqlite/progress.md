@@ -14,3 +14,7 @@
 - Task 2: complete (commits fb1887c..1a52f86, tests: `npx vitest run server` → 12 passed).
 - Task 3: complete (commits 1a52f86..9ac2970, tests: `npx vitest run server` → 21 passed).
 - Task 4: complete (commits 9ac2970..8187b20, verified `node server/index.ts` → health `{ok:true}`, `data/todos.db` created; `npm run build` clean; `npm run test:run` → 90 passed).
+- Task 5: complete (commit aff1463…api-client/frontend hooks, tests: `src/api/client.test.ts` 5 + `src/utils/legacyImport.test.ts` 4 + `src/hooks/useAuth.test.ts` 5 → 14 passed).
+- Task 6: complete (commit aff1463…login-page, tests: `src/components/LoginPage.test.tsx` → 7 passed).
+- Task 7: complete (commit aff1463, tests: `src/hooks/useTodos.test.ts` 6 + `src/App.test.tsx` 9 + all prior → 110 passed, `npm run build` clean).
+- Task 8: complete (live E2E verification: `npm run dev` → health check OK, register/login/logout all work with cookie-based sessions, add-get-delete todos work, cross-user isolation verified via API (mimin never sees tester's todos), SQLite inspection confirms: no plaintext passwords (120-char scrypt+SHA-256 hashes), session tokens are 64-char hex hashes, todos scoped to user_id, `npm run test:run` → 110 passed, `npm run build` clean).

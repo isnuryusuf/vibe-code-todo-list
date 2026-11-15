@@ -1,0 +1,7 @@
+{
+  "projectId": "da7581c3-a71a-4322-895b-a861a3ea4a5b",
+  "environment": "production",
+  "baseUrl": "https://portal.app.neoapp.id",
+  "env": "production",
+  "name": "vibe-code-todo"
+}

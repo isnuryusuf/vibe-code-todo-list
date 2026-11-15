@@ -3,7 +3,7 @@ import { createDatabase } from './db.ts';
 import { seedDefaultUser } from './seed.ts';
 import { createApp } from './app.ts';
 
-const port = Number(process.env.PORT ?? 3001);
+const port = Number(process.env.PORT ?? 80);
 const db = createDatabase(process.env.DB_PATH);
 await seedDefaultUser(db);
 

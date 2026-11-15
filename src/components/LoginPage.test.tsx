@@ -62,12 +62,12 @@ describe('LoginPage', () => {
     const input = screen.getByLabelText(/username/i) as HTMLInputElement;
     const password = screen.getByLabelText(/password/i) as HTMLInputElement;
 
-    fireEvent.change(input, { target: { value: '  mimin  ' } });
-    fireEvent.change(password, { target: { value: 'Mimin2026' } });
+    fireEvent.change(input, { target: { value: '  alice  ' } });
+    fireEvent.change(password, { target: { value: 'password1' } });
     fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
 
     await waitFor(() => {
-      expect(onLogin).toHaveBeenCalledWith('mimin', 'Mimin2026');
+      expect(onLogin).toHaveBeenCalledWith('alice', 'password1');
     });
   });
 
@@ -98,7 +98,7 @@ describe('LoginPage', () => {
     const input = screen.getByLabelText(/username/i) as HTMLInputElement;
     const password = screen.getByLabelText(/password/i) as HTMLInputElement;
 
-    fireEvent.change(input, { target: { value: 'mimin' } });
+    fireEvent.change(input, { target: { value: 'alice' } });
     fireEvent.change(password, { target: { value: 'wrong' } });
 
     const button = screen.getByRole('button', { name: /sign in/i });

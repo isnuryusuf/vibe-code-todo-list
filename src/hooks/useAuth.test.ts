@@ -53,7 +53,7 @@ describe('useAuth', () => {
     expect(result.current.user).toBeNull();
 
     await act(async () => {
-      await result.current.login('mimin', 'Mimin2026');
+      await result.current.login('alice', 'password1');
     });
 
     expect(result.current.user).not.toBeNull();
@@ -74,7 +74,7 @@ describe('useAuth', () => {
 
     const error = await act(async () => {
       try {
-        await result.current.login('mimin', 'wrong-password');
+        await result.current.login('alice', 'wrong-password');
       } catch (e) {
         return e;
       }

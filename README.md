@@ -19,18 +19,14 @@ npm run dev
 - Web app: <http://localhost:5173>
 - API: <http://localhost:3001> (Vite proxies `/api` to it)
 
-Sign in with the seeded account:
-
-- **Username:** `mimin`
-- **Password:** `Mimin2026`
-
-You can also create your own account from the login page.
+Create your own account from the login page — there is no pre-defined default
+user.
 
 ## Data
 
 Accounts, sessions, and todos live in `data/todos.db` (SQLite). The file and its
 directory are created on first start and are ignored by git. Delete the file to
-reset the app; the `mimin` account is re-seeded on the next start.
+reset the app; it starts empty, so register a new account on next start.
 
 Passwords are stored as salted scrypt hashes, and session tokens are stored only
 as SHA-256 hashes. Todos left in the old browser `localStorage` list are imported

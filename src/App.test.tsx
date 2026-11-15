@@ -19,17 +19,17 @@ describe('App with auth', () => {
       expect(screen.getByLabelText(/username/i)).toBeInTheDocument();
     });
 
-    // Login as mimin
+    // Login as alice
     fireEvent.change(screen.getByLabelText(/username/i), {
-      target: { value: 'mimin' },
+      target: { value: 'alice' },
     });
     fireEvent.change(screen.getByLabelText(/password/i), {
-      target: { value: 'Mimin2026' },
+      target: { value: 'password1' },
     });
     fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
 
     await waitFor(() => {
-      expect(screen.getByText('mimin')).toBeInTheDocument();
+      expect(screen.getByText('alice')).toBeInTheDocument();
     });
 
     // Add "Learn React"
@@ -137,7 +137,7 @@ describe('App with auth', () => {
     installFakeApi();
     render(<App />);
     await waitFor(() => {
-      expect(screen.getByText('mimin')).toBeInTheDocument();
+      expect(screen.getByText('alice')).toBeInTheDocument();
     });
 
     expect(screen.getByRole('button', { name: /export/i })).toBeDefined();
@@ -153,7 +153,7 @@ describe('App with auth', () => {
     expect(screen.getByLabelText(/password/i)).toBeInTheDocument();
   });
 
-  test('login with mimin / Mimin2026 (fake loginPassword) reaches the todo app and shows the username', async () => {
+  test('login with alice / password1 (fake loginPassword) reaches the todo app and shows the username', async () => {
     installFakeApi({ authenticated: false });
     render(<App />);
 
@@ -162,15 +162,15 @@ describe('App with auth', () => {
     });
 
     fireEvent.change(screen.getByLabelText(/username/i), {
-      target: { value: 'mimin' },
+      target: { value: 'alice' },
     });
     fireEvent.change(screen.getByLabelText(/password/i), {
-      target: { value: 'Mimin2026' },
+      target: { value: 'password1' },
     });
     fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
 
     await waitFor(() => {
-      expect(screen.getByText('mimin')).toBeInTheDocument();
+      expect(screen.getByText('alice')).toBeInTheDocument();
     });
   });
 
@@ -179,7 +179,7 @@ describe('App with auth', () => {
     render(<App />);
 
     await waitFor(() => {
-      expect(screen.getByText('mimin')).toBeInTheDocument();
+      expect(screen.getByText('alice')).toBeInTheDocument();
     });
 
     fireEvent.click(screen.getByRole('button', { name: /log out/i }));
@@ -207,12 +207,12 @@ describe('App with auth', () => {
       expect(screen.getByLabelText(/username/i)).toBeInTheDocument();
     });
 
-    // Login as mimin
+    // Login as alice
     fireEvent.change(screen.getByLabelText(/username/i), {
-      target: { value: 'mimin' },
+      target: { value: 'alice' },
     });
     fireEvent.change(screen.getByLabelText(/password/i), {
-      target: { value: 'Mimin2026' },
+      target: { value: 'password1' },
     });
     fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
     await waitFor(() => {
@@ -237,7 +237,7 @@ describe('App with auth', () => {
 
     // Wait for login form (bootstrap succeeds: me() returns user, todos fail)
     await waitFor(() => {
-      expect(screen.getByText('mimin')).toBeInTheDocument();
+      expect(screen.getByText('alice')).toBeInTheDocument();
     });
 
     // Error banner should appear

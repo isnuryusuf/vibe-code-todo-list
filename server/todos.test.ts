@@ -2,7 +2,6 @@
 import { beforeEach, describe, test, expect } from 'vitest';
 import request from 'supertest';
 import { createDatabase } from './db.ts';
-import { seedDefaultUser } from './seed.ts';
 import { createApp } from './app.ts';
 
 let db: ReturnType<typeof createDatabase>;
@@ -10,11 +9,11 @@ let app: ReturnType<typeof createApp>;
 
 beforeEach(async () => {
   db = createDatabase(':memory:');
-  await seedDefaultUser(db);
   app = createApp(db);
+  await request(app).post('/api/auth/register').send({ username: 'alice', password: 'password1' }).expect(201);
 });
 
-async function loginAs(username = 'mimin', password = 'Mimin2026') {
+async function loginAs(username = 'alice', password = 'password1') {
   const agent = request.agent(app);
   await agent.post('/api/auth/login').send({ username, password }).expect(200);
   return agent;

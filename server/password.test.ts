@@ -4,10 +4,10 @@ import { hashPassword, verifyPassword } from './password.ts';
 
 describe('password hashing', () => {
   test('stores a salted scrypt hash that verifies the original password', async () => {
-    const hash = await hashPassword('Mimin2026');
+    const hash = await hashPassword('correct-horse-battery');
     expect(hash.startsWith('scrypt$')).toBe(true);
-    expect(hash).not.toContain('Mimin2026');
-    expect(await verifyPassword('Mimin2026', hash)).toBe(true);
+    expect(hash).not.toContain('correct-horse-battery');
+    expect(await verifyPassword('correct-horse-battery', hash)).toBe(true);
   });
 
   test('uses a unique salt for every hash', async () => {

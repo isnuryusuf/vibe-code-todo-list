@@ -2,30 +2,29 @@
 import { beforeEach, describe, test, expect } from 'vitest';
 import request from 'supertest';
 import { createDatabase } from './db.ts';
-import { seedDefaultUser } from './seed.ts';
 import { createApp } from './app.ts';
 
 let db: ReturnType<typeof createDatabase>;
 let app: ReturnType<typeof createApp>;
 
+const credentials = { username: 'alice', password: 'password1' };
+
 beforeEach(async () => {
   db = createDatabase(':memory:');
-  await seedDefaultUser(db);
   app = createApp(db);
+  await request(app).post('/api/auth/register').send(credentials).expect(201);
 });
 
-const credentials = { username: 'mimin', password: 'Mimin2026' };
-
 describe('auth API', () => {
-  test('logs in the seeded user and returns the session user', async () => {
+  test('logs in a registered user and returns the session user', async () => {
     const agent = request.agent(app);
 
     const login = await agent.post('/api/auth/login').send(credentials).expect(200);
-    expect(login.body.user).toEqual({ id: expect.any(Number), username: 'mimin' });
+    expect(login.body.user).toEqual({ id: expect.any(Number), username: 'alice' });
     expect(login.body.user.password_hash).toBeUndefined();
 
     const me = await agent.get('/api/auth/me').expect(200);
-    expect(me.body.user.username).toBe('mimin');
+    expect(me.body.user.username).toBe('alice');
   });
 
   test('sets an HTTP-only session cookie', async () => {
@@ -42,7 +41,7 @@ describe('auth API', () => {
   test('rejects bad credentials and unauthenticated /me', async () => {
     await request(app)
       .post('/api/auth/login')
-      .send({ username: 'mimin', password: 'wrong-password' })
+      .send({ username: 'alice', password: 'wrong-password' })
       .expect(401, { error: 'Invalid username or password' });
 
     await request(app)
@@ -58,17 +57,17 @@ describe('auth API', () => {
 
     const created = await agent
       .post('/api/auth/register')
-      .send({ username: 'alice', password: 'password1' })
+      .send({ username: 'bob', password: 'password1' })
       .expect(201);
-    expect(created.body.user.username).toBe('alice');
+    expect(created.body.user.username).toBe('bob');
 
     await agent.get('/api/auth/me').expect(200).expect(({ body }) => {
-      expect(body.user.username).toBe('alice');
+      expect(body.user.username).toBe('bob');
     });
 
     await request(app)
       .post('/api/auth/register')
-      .send({ username: 'ALICE', password: 'password1' })
+      .send({ username: 'BOB', password: 'password1' })
       .expect(409, { error: 'Username already taken' });
   });
 

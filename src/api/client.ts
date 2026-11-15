@@ -13,9 +13,10 @@ export class ApiError extends Error {
 
 // Use a full base URL in dev so the frontend can call the API directly,
 // avoiding the Vite proxy (which causes a startup race on Windows).
+// Test mode (vitest) keeps relative paths so fetch mocks match "/api/...".
 const API_BASE =
   import.meta.env.VITE_API_URL ||
-  (import.meta.env.DEV ? `http://localhost:3001` : '');
+  (import.meta.env.DEV && import.meta.env.MODE !== 'test' ? `http://localhost:3001` : '');
 
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   const hasBody = init.body !== undefined;

@@ -18,8 +18,8 @@ export interface FakeApiOptions {
   failTodos?: boolean;
 }
 
-const DEFAULT_USER: User = { id: 1, username: 'mimin' };
-const DEFAULT_PASSWORD = 'Mimin2026';
+const DEFAULT_USER: User = { id: 1, username: 'alice' };
+const DEFAULT_PASSWORD = 'password1';
 
 function reply(status: number, body?: unknown): Response {
   return {

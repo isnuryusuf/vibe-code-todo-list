@@ -24,15 +24,15 @@ afterEach(() => {
 
 describe('api client', () => {
   test('logs in with JSON credentials and returns the user', async () => {
-    const fetchMock = mockFetch(jsonResponse({ user: { id: 1, username: 'mimin' } }));
+    const fetchMock = mockFetch(jsonResponse({ user: { id: 1, username: 'alice' } }));
 
-    const result = await api.login('mimin', 'Mimin2026');
+    const result = await api.login('alice', 'password1');
 
-    expect(result).toEqual({ user: { id: 1, username: 'mimin' } });
+    expect(result).toEqual({ user: { id: 1, username: 'alice' } });
     expect(fetchMock).toHaveBeenCalledWith('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: 'mimin', password: 'Mimin2026' }),
+      body: JSON.stringify({ username: 'alice', password: 'password1' }),
     });
   });
 

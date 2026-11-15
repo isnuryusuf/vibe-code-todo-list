@@ -11,6 +11,12 @@ export class ApiError extends Error {
   }
 }
 
+// Use a full base URL in dev so the frontend can call the API directly,
+// avoiding the Vite proxy (which causes a startup race on Windows).
+const API_BASE =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.DEV ? `http://localhost:3001` : '');
+
 async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   const hasBody = init.body !== undefined;
   const headers: Record<string, string> = {
@@ -18,7 +24,8 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
     ...(init.headers as Record<string, string> | undefined),
   };
 
-  const response = await fetch(path, { ...init, headers });
+  const url = API_BASE ? `${API_BASE}${path}` : path;
+  const response = await fetch(url, { ...init, headers });
 
   if (!response.ok) {
     let message = `Request failed with status ${response.status}`;

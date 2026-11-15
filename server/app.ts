@@ -12,6 +12,26 @@ export interface AppOptions {
 export function createApp(db: DatabaseSync, options: AppOptions = {}): Express {
   const app = express();
 
+  // CORS for dev (Vite on 5173 calls API on 3001 directly)
+  const corsOrigins = (process.env.CORS_ORIGIN || '').split(',').filter(Boolean);
+  if (corsOrigins.length > 0) {
+    app.use((_req, res, next) => {
+      const origin = _req.headers.origin;
+      if (origin && corsOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+      }
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      if (_req.method === 'OPTIONS') {
+        res.writeHead(204);
+        res.end();
+        return;
+      }
+      next();
+    });
+  }
+
   app.use((_req, res, next) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');

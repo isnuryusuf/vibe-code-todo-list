@@ -26,7 +26,7 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<T> {
   };
 
   const url = API_BASE ? `${API_BASE}${path}` : path;
-  const response = await fetch(url, { ...init, headers });
+  const response = await fetch(url, { ...init, headers, credentials: 'include' });
 
   if (!response.ok) {
     let message = `Request failed with status ${response.status}`;

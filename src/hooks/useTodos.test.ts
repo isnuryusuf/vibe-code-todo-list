@@ -46,6 +46,7 @@ describe('useTodos (API-backed)', () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: 'New task' }),
+      credentials: 'include',
     });
   });
 

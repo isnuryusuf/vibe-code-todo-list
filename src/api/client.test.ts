@@ -33,6 +33,7 @@ describe('api client', () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: 'alice', password: 'password1' }),
+      credentials: 'include',
     });
   });
 
@@ -53,6 +54,7 @@ describe('api client', () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: 'Buy milk', dueDate: '2026-12-25' }),
+      credentials: 'include',
     });
   });
 
@@ -91,6 +93,7 @@ describe('api client', () => {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ dueDate: null }),
+      credentials: 'include',
     });
   });
 });
